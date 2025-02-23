@@ -5,12 +5,15 @@
  * the number twice.
  */
 export function bookEndList(numbers: number[]): number[] {
+    if (numbers.length === 0) {
+        return [];
+    }
     let first: number = numbers[0];
-    let last: number = numbers[-1];
-    numbers = numbers.slice(0, 2);
-    numbers[0] = first;
-    numbers[-1] = last;
-    return numbers;
+    let last: number = numbers[numbers.length - 1];
+    let newArr: number[] = [];
+    newArr.push(first);
+    newArr.push(last);
+    return newArr;
 }
 
 /**
@@ -48,9 +51,16 @@ export function stringsToIntegers(numbers: string[]): Number[] {
  */
 // Remember, you can write functions as lambdas too! They work exactly the same.
 export const removeDollars = (amounts: string[]): number[] => {
+    if (amounts.length === 0) {
+        return [];
+    }
     let value: number[] = amounts.map((str) => {
         if (str[0] === "$") {
-            str = str.slice(1, -1);
+            str = str.slice(1, str.length);
+            if (isNaN(Number(str))) {
+                return 0;
+            }
+            return Number(str);
         }
         if (isNaN(Number(str))) {
             return 0;
@@ -67,8 +77,13 @@ export const removeDollars = (amounts: string[]): number[] => {
  * in question marks ("?").
  */
 export const shoutIfExclaiming = (messages: string[]): string[] => {
-    let upper: string[] = messages.map((str) => str.toUpperCase());
-    let value: string[] = upper.filter((message) => message[-1] != "?");
+    let upper: string[] = messages.map((str) => {
+        if (str.slice(-1) === "!") {
+            return str.toUpperCase();
+        }
+        return str;
+    });
+    let value: string[] = upper.filter((message) => message.slice(-1) != "?");
     return value;
 };
 
@@ -77,8 +92,8 @@ export const shoutIfExclaiming = (messages: string[]): string[] => {
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    words.filter((word) => word.length < 4);
-    return 0;
+    let value: string[] = words.filter((word) => word.length < 4);
+    return value.length;
 }
 
 /**
@@ -87,7 +102,16 @@ export function countShortWords(words: string[]): number {
  * then return true.
  */
 export function allRGB(colors: string[]): boolean {
-    return false;
+    if (colors.length === 0) {
+        return true;
+    }
+
+    let value: string[] = colors.filter(
+        (element) =>
+            element === "red" || element === "green" || element === "blue",
+    );
+
+    return value.length === colors.length;
 }
 
 /**
@@ -101,15 +125,15 @@ export function makeMath(addends: number[]): string {
     if (addends.length === 0) {
         return "0=0";
     }
-    let message: string =
-        String(addends[0] + addends[1] + addends[2]) +
-        "=" +
-        String(addends[0]) +
-        "+" +
-        String(addends[1]) +
-        "+" +
-        String(addends[2]);
-    return message;
+    if (addends.length === 1) {
+        return String(addends[0]) + "=" + String(addends[0]);
+    }
+
+    let sum: number = 0;
+    addends.forEach((tem) => (sum += tem));
+    let finalstring: string = String(sum) + "=";
+    addends.forEach((tem) => (finalstring += String(tem) + "+"));
+    return finalstring.slice(0, finalstring.length - 1);
 }
 
 /**
@@ -122,18 +146,27 @@ export function makeMath(addends: number[]): string {
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
 export function injectPositive(values: number[]): number[] {
+    if (values.length === 0) {
+        return [0];
+    }
     let sum: number = 0;
     let arr1: number[] = [];
+    let interations: number = 0;
+    let firstNeg: number = 0;
     values.forEach((value) => {
-        if (value >= 0) {
+        if (value >= 0 || firstNeg === 1) {
+            interations += 1;
             sum += value;
             arr1.push(value);
         }
-        if (value < 0) {
-            arr1.push(value);
+        if (value < 0 && firstNeg < 1) {
+            firstNeg += arr1.push(value);
+            arr1.push(sum);
+        }
+        if (interations === values.length) {
             arr1.push(sum);
         }
     });
 
-    return [];
+    return arr1;
 }
