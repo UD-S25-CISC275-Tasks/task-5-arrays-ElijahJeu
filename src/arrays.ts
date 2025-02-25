@@ -19,9 +19,7 @@ export function bookEndList(numbers: number[]): number[] {
  * number has been tripled (multiplied by 3).
  */
 export function tripleNumbers(numbers: number[]): number[] {
-    numbers = numbers.map((x) => x * 3);
-
-    return numbers;
+    return numbers.map((x) => x * 3);
 }
 
 /**
@@ -30,15 +28,7 @@ export function tripleNumbers(numbers: number[]): number[] {
  */ // used chatgpt to see what error or value I get when number cant be converted Question
 // is asked "if i have Number(str) and str could not be converted to a number what value or error would I get"
 export function stringsToIntegers(numbers: string[]): Number[] {
-    let value: Number[] = numbers.map((str) => {
-        if (isNaN(Number(str))) {
-            return 0;
-        } else {
-            return Number(str);
-        }
-    });
-
-    return value;
+    return numbers.map((str) => (isNaN(Number(str)) ? 0 : Number(str)));
 }
 
 /**
