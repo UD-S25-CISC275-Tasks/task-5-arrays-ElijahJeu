@@ -10,9 +10,7 @@ export function bookEndList(numbers: number[]): number[] {
     }
     let first: number = numbers[0];
     let last: number = numbers[numbers.length - 1];
-    let newArr: number[] = [];
-    newArr.push(first);
-    newArr.push(last);
+    let newArr: number[] = [first, last];
     return newArr;
 }
 
@@ -157,14 +155,15 @@ export function injectPositive(values: number[]): number[] {
         if (value >= 0 || firstNeg === 1) {
             interations += 1;
             sum += value;
-            arr1.push(value);
+            arr1 = [...arr1, value];
         }
         if (value < 0 && firstNeg < 1) {
-            firstNeg += arr1.push(value);
-            arr1.push(sum);
+            firstNeg += 1;
+            arr1 = [...arr1, value];
+            arr1 = [...arr1, sum];
         }
         if (interations === values.length) {
-            arr1.push(sum);
+            arr1 = [...arr1, sum];
         }
     });
 
